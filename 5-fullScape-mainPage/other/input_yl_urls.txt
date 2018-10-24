@@ -1,0 +1,9 @@
+http://live.yodle.com/app/clientconfig/domainlist?clientId=117653
+http://live.yodle.com/app/clientconfig/domainlist?clientId=115653
+http://live.yodle.com/app/clientconfig/domainlist?clientId=116653
+http://live.yodle.com/app/clientconfig/domainlist?clientId=117654
+http://live.yodle.com/app/clientconfig/domainlist?clientId=115655
+http://live.yodle.com/app/clientconfig/domainlist?clientId=116656
+http://live.yodle.com/app/clientconfig/domainlist?clientId=117657
+http://live.yodle.com/app/clientconfig/domainlist?clientId=115658
+http://live.yodle.com/app/clientconfig/domainlist?clientId=116659

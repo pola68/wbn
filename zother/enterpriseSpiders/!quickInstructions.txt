@@ -1,0 +1,7 @@
+Run using:
+
+scrapy crawl --nolog pageSpider -o pageSpider-results.csv
+
+scrapy crawl --nolog sitemapSpider -o sitemapSpider-results.csv
+
+

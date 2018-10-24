@@ -1,0 +1,4 @@
+Run using:
+scrapy crawl webcrawler > output2.csv
+
+
