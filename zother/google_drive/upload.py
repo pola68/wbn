@@ -5,7 +5,7 @@ gauth = GoogleAuth()
 gauth.LocalWebserverAuth()
 drive = GoogleDrive(gauth)
 
-file1 = drive.CreateFile({'title': 'Michal Testing.xls'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
+file1 = drive.CreateFile({'title': 'Michal Testing3333.xls'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
 file1.SetContentString("Hello World!\n We'll see to do a little more here") # Set content of the file from given string.
 file1.Upload()
 
