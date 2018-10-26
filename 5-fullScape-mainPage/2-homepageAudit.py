@@ -9,6 +9,9 @@ import unittest, time, datetime, re, csv, requests, tldextract, dns.resolver, ps
 from urllib.parse import urlparse
 sys.path.append('/tools')
 import mySetup
+from pydrive.drive import GoogleDrive
+from pydrive.auth import GoogleAuth
+gauth = GoogleAuth(); gauth.LocalWebserverAuth(); drive = GoogleDrive(gauth)
 
 corporateID = sys.argv[1]
 sqlLimit = sys.argv[2]
@@ -217,7 +220,7 @@ for clientid, clientStatus, corpName, clientName, url, sslStatus, corpId in zip(
 
 #Connecting To Natpal DB
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user="", password="", dbname="natpal")
+		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user="mswiader", password="Korana17", dbname="natpal")
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -493,3 +496,11 @@ smtpserver.sendmail(gmail_user, recipients.split(', '), msg)
 file_summary = open("output/qa_summary - " + corpName + ".csv", "w")
 file_summary.write(results_summary)
 file_summary.close
+
+#Saving to Google Drive
+g_file = drive.CreateFile({"parents": [{"kind": "drive#fileLink", "id": '19kzjQTNCnfJGwIGitpD2Z4tE91rLL_29'}], 'title': 'mainPageQA-'+corpName+' - Accounts With Errors-'+str(len(total_all_with_errors))+'.xls', 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}) 
+g_file.SetContentString(results_summary)
+g_file.Upload({'convert' : True})
+
+
+
