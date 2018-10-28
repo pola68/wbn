@@ -1,0 +1,6 @@
+ClientID,ClientName,URL,Status,Number of redirects,Redirect Chain,Final URL,Final URL Status,Final URL IP,Final URL NS,
+3392,Mr. Electric of Southwest Florida,mrelectric-capecoral.com,301,3,http://mrelectric-capecoral.com/ | https://mrelectric-capecoral.com/ | http://www.mrelectric-capecoral.com/ | ,https://www.mrelectric-capecoral.com/,200,209.17.116.160,ns3b.dns-host.com.,
+187807,Mr. Electric of Waukesha,web.mrelectric.com/waukesha,301,2,http://web.mrelectric.com/waukesha | https://web.mrelectric.com/waukesha | ,https://web.mrelectric.com/waukesha/,200,162.223.12.199,edns86.ultradns.org.,
+230357,Mr. Electric of Fairfax,mrelectric-fairfax.com,301,3,http://mrelectric-fairfax.com/ | https://mrelectric-fairfax.com/ | http://www.mrelectric-fairfax.com/ | ,https://www.mrelectric-fairfax.com/,200,209.17.116.160,ns3a.dns-host.com.,
+230359,Mr. Electric of Montgomery,mrelectric-montgomery.com,301,3,http://mrelectric-montgomery.com/ | https://mrelectric-montgomery.com/ | http://www.mrelectric-montgomery.com/ | ,https://www.mrelectric-montgomery.com/,200,209.17.116.160,ns3a.dns-host.com.,
+233402,Mr. Electric of Paola,mrelectric.com/paola,301,1,http://mrelectric.com/paola | ,https://mrelectric.com/paola,200,162.223.12.199,edns86.ultradns.net.,
