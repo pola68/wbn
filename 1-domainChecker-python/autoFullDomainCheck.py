@@ -97,7 +97,11 @@ with open(output_file, 'w') as o_file:
 			url = "no-domain.com"
 		else:
 			url = url
+			
+		#removing commas from client and corp names
 		clientName = clientName.replace(",", "")
+		corpName = corpName.replace(",", "")
+		
 		code = review_domain(url)
 		final_results = str(corpId) + "," + corpName + "," + str(clientid) + "," + clientName + "," + url + "," + str(code) + ",\n"
 		o_file.write(final_results)
