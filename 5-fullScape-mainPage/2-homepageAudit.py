@@ -19,7 +19,7 @@ sqlLimit = sys.argv[2]
 #Opening SQLite Connection
 sqlite_connection = sqlite3.connect('database.db', timeout=10); c = sqlite_connection.cursor()
 
-#Creative QA session ID
+#Create QA session ID
 czas = time.time()
 qa_session_id = datetime.datetime.fromtimestamp(czas).strftime('%Y%m%d%H%M%S')
 print(qa_session_id)
@@ -45,7 +45,7 @@ def find_phones():
 
 #Connecting to Postgres Natpal DB to pull list of accounts
 try:
-	conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+	conn=psycopg2.connect(host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 except:
 	print("I am unable to connect to the database.")
 cur = conn.cursor()

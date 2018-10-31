@@ -11,7 +11,7 @@ col2 = ef.bold + fg.li_red
 #List microsites under certain corp website
 def microSites(corp_input):
 	try:
-		conn2=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn2=psycopg2.connect(host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn2.cursor()
@@ -42,7 +42,7 @@ def microSites(corp_input):
 # Local Account Lookup
 def localAccountLookup(loc_account_input):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -123,7 +123,7 @@ def localAccountLookup(loc_account_input):
 # Domain Search
 def searchDomain(domain_input):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -166,7 +166,7 @@ def searchDomain(domain_input):
 # CTN Phone Search
 def searchPhone(phone_input):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -286,7 +286,7 @@ def pingDomain(url):
 # Search Local Account
 def searchAccount(name_query, name_status):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -318,7 +318,7 @@ def searchAccount(name_query, name_status):
 # Corporate relationships by revenue
 def corpRevenue(start_date, end_date):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -355,7 +355,7 @@ def corpRevenue(start_date, end_date):
 # Corporate Account Lookup
 def corpAccountLookup(corp_identifier):
 	try:
-		conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+		conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 	except:
 		print("I am unable to connect to the database.")
 	cur = conn.cursor()
@@ -389,7 +389,7 @@ def corpAccountLookup(corp_identifier):
 			except:
 				print("Revenue couldn't be retrieved\n")
 			#Pulling list individual of individual accounts for this relationship
-			print("Client IDs:")
+			print("Client IDs (LIVE accounts only):")
 			cur.execute("SELECT fma.franchisechildren_id from control.corporate_relationship corp join control.franchisemasteraccount_client fma on fma.franchisemasteraccount_id = corp.fma_id join control.client cc on cc.id = fma.franchisechildren_id where cc.status = 'LIVE' and corp.id = {corpid}".format(**vars()))
 			rows = list(cur.fetchall())
 			str1 = ''.join(str(e) for e in rows)
@@ -520,28 +520,30 @@ else:
 
 #Connecting to Postgres Natpal DB to pull list of accounts
 try:
-	conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+	conn=psycopg2.connect( host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 except:
 	print("I am unable to connect to the database.")
 cur = conn.cursor()
 try:
-	cur.execute("SELECT corp.id, corp.name, count(corp.id) from control.corporate_relationship corp join control.franchisemasteraccount_client fma on corp.fma_id = fma.franchisemasteraccount_id join control.client cc on fma.franchisechildren_id = cc.id where cc.status = 'LIVE' {name_search} group by corp.id, corp.name, corp.name, corp.fma_id order by {order}".format(**vars()))
+	cur.execute("SELECT corp.id, corp.fma_id, corp.short_name, corp.name, count(corp.id) from control.corporate_relationship corp join control.franchisemasteraccount_client fma on corp.fma_id = fma.franchisemasteraccount_id join control.client cc on fma.franchisechildren_id = cc.id where cc.status = 'LIVE' {name_search} group by corp.id, corp.name, corp.name, corp.fma_id order by {order}".format(**vars()))
 	rows = list(cur.fetchall())
-	corpIds = []; corpNames = []; locationCounts = []
+	corpIds = []; corpFMAs = []; corpShortnames = []; corpNames = []; locationCounts = []
 	for row in rows:
 		corpIds.append(row[0])
-		corpNames.append(row[1])
-		locationCounts.append(row[2])
+		corpFMAs.append(row[1])
+		corpShortnames.append(row[2])
+		corpNames.append(row[3])
+		locationCounts.append(row[4])
 
 	cur.close()
 except:
 	print("Cannot run DB query")
 
-print("-----------------------------------------------------\nCorpID\t# Of Loc\tCorpName\n")
+print("-----------------------------------------------------\nCorpID\tFMA-ID\t# Of Loc\tCorpName\n")
 locationSum = 0
-for corpId, corpName, locationCount in zip(corpIds, corpNames, locationCounts):
+for corpId, corpFMA, corpShortname, corpName, locationCount in zip(corpIds, corpFMAs, corpShortnames, corpNames, locationCounts):
 	locationSum += locationCount
-	print(str(corpId) + "\t" + str(locationCount) + "\t" + corpName)
+	print(str(corpId) + "\t" + str(corpFMA) + "\t" + str(locationCount) + "\t" + corpName)
 
 print("\nAll LIVE locations number: " + str(locationSum))
 print("-----------------------------------------------------")

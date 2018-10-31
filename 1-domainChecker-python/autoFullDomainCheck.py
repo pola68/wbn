@@ -7,10 +7,12 @@ gauth = GoogleAuth(); gauth.LocalWebserverAuth(); drive = GoogleDrive(gauth)
 
 corporateID = "767,203,214,399"
 sqlLimit = 10000
+counter = 1
+
 
 #Connecting to Postgres Natpal DB to pull list of domains
 try:
-	conn=psycopg2.connect( host="coredb2.prod.yodle.com", user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname="natpal")
+	conn=psycopg2.connect(host=mySetup.natpalHost, user=mySetup.natpalDbUsername, password=mySetup.natpalDbPassword, dbname=mySetup.natpalDBname)
 except:
 	print("I am unable to connect to the database.")
 cur = conn.cursor()
@@ -28,10 +30,12 @@ try:
 		corpIds.append(row[6])
 
 	cur.close()
+	conn.close()
 	print("Number of domains to check: " + str(len(rows)))
 except:
 	print("Cannot run DB query")
 
+conn.close()
 
 def review_domain(url):
 	if "http" in url:
@@ -41,9 +45,6 @@ def review_domain(url):
 
 	try:
 		r = requests.get(url)
-		#r = requests.get(url)
-		print("Processing " + url)
-
 
 		if len(r.history) > 0:
 			chain = ""
@@ -103,6 +104,8 @@ with open(output_file, 'w') as o_file:
 		corpName = corpName.replace(",", "")
 		
 		code = review_domain(url)
+		counter += 1
+		print(str(counter) + "/" + str(len(rows)) + " Processing " + url)
 		final_results = str(corpId) + "," + corpName + "," + str(clientid) + "," + clientName + "," + url + "," + str(code) + ",\n"
 		o_file.write(final_results)
 		g_content += (final_results)
